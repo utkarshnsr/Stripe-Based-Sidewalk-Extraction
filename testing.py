@@ -41,10 +41,10 @@ def getMinimumEigenValue(data):
         x = np.vstack([samplePointsX,samplePointsY,samplePointsZ])
         cov = np.cov(x)
         eigen_vals, eigen_vecs = np.linalg.eig(cov)
-        return eigen_vals[2]
+        return min(eigen_vals)
 
-def performExtraction(thresholdValue):
-    data = pd.read_csv("sample.csv")
+def performExtraction(thresholdValue, elevationFilter):
+    data = pd.read_csv("sidewalk.csv")
     pointCoordinates = data[['X','Y','Z']]
     pointCoordinates = np.asarray(pointCoordinates)
     octree = open3d.geometry.Octree(max_depth=0)
@@ -57,7 +57,7 @@ def performExtraction(thresholdValue):
     leafList = []
     getAllLeafNodes(rootNode,leafList)
     returnList = stripeMerging(leafList,data,thresholdValue)
-    getCsv(returnList,data)
+    getCsv(returnList,data,elevationFilter)
     
     
 
@@ -71,7 +71,7 @@ def stripeSplitting(node, data,indices,depth, thresholdValue):
         if (len(pointCoordinates) <= 1):
             return
         thirdEigenValue = getMinimumEigenValue(pointCoordinates)
-        
+        print(thirdEigenValue)
         if (thirdEigenValue > float(thresholdValue)):
             octree = open3d.geometry.Octree(max_depth=1)
             pcd = open3d.geometry.PointCloud()
@@ -197,11 +197,12 @@ def stripeMerging(leafNodes,data,thresholdValue):
             clusterList.append(i)
     return clusterList
 
-def getCsv(l,data):
+def getCsv(l,data, elevationFilter):
     i = 0
     for j in l:
         fileName = "child" + str(i) + ".csv"
         dataValue = data.iloc[j]
+        #dataValue = dataValue[dataValue['Z'] <= float(elevationFilter)]
         dataValue.to_csv(fileName,index=False)
         i += 1
 
@@ -211,5 +212,6 @@ def getCsv(l,data):
 
 if __name__ == "__main__":
     thresholdValue = input("Enter threshold:")
-    performExtraction(thresholdValue)
+    elevationFilteringValue = input("Enter elevation filter:")
+    performExtraction(thresholdValue,elevationFilteringValue)
 
