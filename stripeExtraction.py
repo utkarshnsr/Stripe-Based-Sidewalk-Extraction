@@ -261,7 +261,8 @@ def getCsv(l,data, elevationFilter,filenameIndex,fileName):
 -Here, the coplanar criterion threshold value and elevation filtering value used for Y-axis filtering are asked as input from the user.
 -Then, the performExtraction() method is called for each stripe.
 """
-#please choose 0.002 for thresholdValue and 3740621.59 for elevation filtering value. Also, ignore files with names like "Fstripe...".
+#please choose 0.002 for thresholdValue and 3740621.59 for elevation filtering value. Also, ignore files with names like "Fstripe...". 
+#Note: The results of this implementation are stored in the results folder.
 if __name__ == "__main__":
     coplanarThresholdValue = input("Enter coplanar threshold:")
     elevationFilteringValue = input("Enter elevation filter:")
