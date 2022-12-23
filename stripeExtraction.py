@@ -175,14 +175,15 @@ def stripeSplitting(node, data,indices,depth, coplanarThresholdValue):
         return 
         
 """
--This is the getAllLeafNodes() function. It essentially retrieves the leaf nodes that are in the octree structure. 
+-This is the getAllLeafNodes() function. It essentially retrieves the leaf nodes that are in the octree structure in a recursive manner. 
 -These leaf nodes will then be used as input to the stripe merging function to perform stripe merging process.
 """
 def getAllLeafNodes(node, leafList):
     if (node != None):
         if isinstance(node.value, open3d.geometry.OctreePointColorLeafNode):
             printStatement = "  " * (node.depth) + "node: {} depth: {}".format(node.value,node.depth)
-            if (node.firstChild == None and node.secondChild == None and node.thirdChild == None and node.fourthChild == None and node.fifthChild == None and node.sixthChild == None and node.seventhChild == None and node.eigthChild == None):
+            if (node.firstChild == None and node.secondChild == None and node.thirdChild == None and node.fourthChild == None and node.fifthChild == None 
+            and node.sixthChild == None and node.seventhChild == None and node.eigthChild == None):
                 leafList.append(node.indices)
             getAllLeafNodes(node.firstChild,leafList)
             getAllLeafNodes(node.secondChild,leafList)
@@ -260,11 +261,10 @@ def getCsv(l,data, elevationFilter,filenameIndex,fileName):
 -Here, the coplanar criterion threshold value and elevation filtering value used for Y-axis filtering are asked as input from the user.
 -Then, the performExtraction() method is called for each stripe.
 """
-#please choose 0.0015 for thresholdValue and random number for elevation filtering value
+#please choose 0.002 for thresholdValue and 3740621.59 for elevation filtering value. Also, ignore files with names like "Fstripe...".
 if __name__ == "__main__":
     coplanarThresholdValue = input("Enter coplanar threshold:")
     elevationFilteringValue = input("Enter elevation filter:")
-    #stripesFileNames = ["stripe1.csv","stripe2.csv"]
     stripesFileNames = []
     
     
